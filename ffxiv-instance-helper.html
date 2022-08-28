@@ -1,0 +1,116 @@
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <style>
+        * {
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        body, html {
+            margin: 0;
+        }
+
+        html {
+            height: 100%;
+
+            overflow: hidden;
+
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .resizeHandle {
+            background-position: bottom right;
+            background-repeat: no-repeat;
+            box-sizing: border-box;
+        }
+
+        #instance-name {
+            padding-left: 10px;
+        }
+
+        #instance-name,
+        #tips, * {
+            color: #DED7BE;
+            text-shadow: -1px 0 2px #167179, 0 1px 2px #167179, 1px 0 2px #167179, 0 -1px 2px #167179;
+            font-weight: 300;
+            white-space: nowrap;
+        }
+    </style>
+    <script type="text/javascript" src="https://ngld.github.io/OverlayPlugin/assets/shared/common.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+<div id="instance-name">
+    未知副本区域
+</div>
+<hr>
+<div id="tips">
+</div>
+<script>
+    let instanceData = [];
+
+    async function initData() {
+        await d3.csv("data.csv").then((data) => {
+            instanceData = data;
+            console.log(instanceData.length)
+        });
+    }
+
+    document.addEventListener("onOverlayStateUpdate", function (e) {
+        if (!e.detail.isLocked) {
+            displayResizeHandle();
+        } else {
+            hideResizeHandle();
+        }
+    });
+
+    function displayResizeHandle() {
+        document.documentElement.classList.add("resizeHandle");
+    }
+
+    function hideResizeHandle() {
+        document.documentElement.classList.remove("resizeHandle");
+    }
+
+    initData()
+    // CombatData 订阅活动
+    addOverlayListener("ChangeZone", (e) => update(e));
+    startOverlayEvents();
+
+    // 更新显示元素
+    function update(data) {
+        updateInstanceName(data);
+    }
+
+    function updateInstanceName(data) {
+        const nameElem = document.getElementById('instance-name');
+        const tipsElem = document.getElementById('tips');
+
+        console.log("当前区域变化为" + data.zoneID)
+
+        let instance = instanceData.find(instance => instance.zoneid === "" + data.zoneID)
+        if (typeof (instance) != "undefined" && instance != null) {
+            nameElem.innerHTML = instance.comment;
+
+            let tips = instance.tips.split("|");
+            var ul = document.createElement("ul");
+            tipsElem.appendChild(ul)
+            tips.forEach((v, i) => {
+                var li = document.createElement("li");
+                var a = document.createElement("a");
+
+                ul.appendChild(li);
+                li.setAttribute("id", i + 1);
+                li.appendChild(a);
+                a.innerHTML = v;
+            })
+        } else {
+            nameElem.innerHTML = "非副本区域";
+            tipsElem.innerHTML = "";
+        }
+    }
+</script>
+</body>
+</html>
