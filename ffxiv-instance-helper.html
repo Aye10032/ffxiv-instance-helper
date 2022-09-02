@@ -92,27 +92,33 @@
         const nameElem = document.getElementById('instance-name');
         const tipsElem = document.getElementById('tips');
 
-        console.log("当前区域变化为" + data.zoneID)
-
         let instance = instanceData.find(instance => instance.zoneid === "" + data.zoneID)
         if (typeof (instance) != "undefined" && instance != null) {
             nameElem.innerHTML = instance.comment;
 
-            let tips = instance.tips.split("|");
-            var ul = document.createElement("ul");
-            tipsElem.appendChild(ul)
-            tips.forEach((v, i) => {
-                var li = document.createElement("li");
-                var a = document.createElement("a");
+            if (instance.tips !== ""){
+                let tips = instance.tips.split("|");
+                var ul = document.createElement("ul");
+                tipsElem.appendChild(ul)
+                tips.forEach((v, i) => {
+                    var li = document.createElement("li");
+                    var a = document.createElement("a");
 
-                ul.appendChild(li);
-                li.setAttribute("id", i + 1);
-                li.appendChild(a);
-                a.innerHTML = v;
-            })
+                    ul.appendChild(li);
+                    li.setAttribute("id", i + 1);
+                    li.appendChild(a);
+                    a.innerHTML = v;
+                })
+            }else {
+                tipsElem.innerHTML = "";
+            }
+
+            console.log("当前区域变化为" + data.zoneID + " " + instance.comment)
         } else {
             nameElem.innerHTML = "非副本区域";
             tipsElem.innerHTML = "";
+
+            console.log("当前区域变化为" + data.zoneID)
         }
     }
 </script>
