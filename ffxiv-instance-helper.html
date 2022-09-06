@@ -16,7 +16,7 @@
 
             overflow: hidden;
 
-            background-color: rgba(18, 18, 18, 0.24);
+            background-color: rgba(18, 18, 18, 0);
         }
 
         .resizeHandle {
@@ -36,8 +36,8 @@
 
         #instance-name,
         #tips, * {
-            color: #DED7BE;
-            text-shadow: -1px 0 2px #1c38b0, 0 1px 2px #1c38b0, 1px 0 2px #1c38b0, 0 -1px 2px #1c38b0;
+            color: #ffffff;
+            text-shadow: -1px 0 2px #28C2EC, 0 1px 2px #28C2EC, 1px 0 2px #28C2EC, 0 -1px 2px #28C2EC;
             font-weight: 300;
             white-space: nowrap;
         }
@@ -115,7 +115,7 @@
 
             console.log("当前区域变化为" + data.zoneID + " " + instance.comment)
         } else {
-            nameElem.innerHTML = "非副本区域";
+            nameElem.innerHTML = "未知区域 " + data.zoneID;
             tipsElem.innerHTML = "";
 
             console.log("当前区域变化为" + data.zoneID)
